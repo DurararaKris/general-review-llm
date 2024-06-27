@@ -4,7 +4,7 @@ import time
 import base64
 import streamlit as st
 
-from appreviews import init_app_crew
+from sklandreviews import init_forum_crew
 
 st.set_page_config(initial_sidebar_state="expanded")
 
@@ -21,10 +21,10 @@ robot_icon = """
 upload_dir = "./upload"
 
 
-file_ = open("./static/bedrock.jpeg", "rb")
-contents = file_.read()
-data_url = base64.b64encode(contents).decode("utf-8")
-file_.close()
+# file_ = open("./static/bedrock.jpeg", "rb")
+# contents = file_.read()
+# data_url = base64.b64encode(contents).decode("utf-8")
+# file_.close()
 
 
 
@@ -64,13 +64,13 @@ def hide_warning():
 
 
 with st.sidebar:
-        st.header("App Store Option")
+        st.header("Upload Files")
 
         # Define the options
-        options = ['Google Play', 'Apple Store', 'Steam','Custom File']
+        options = [ 'Custom File']
 
         # Create the selectbox
-        selected_store_option = st.selectbox('Select store', options,disabled=st.session_state['processing'])
+        selected_store_option = st.selectbox('Select', options,disabled=st.session_state['processing'])
 
         
 
@@ -96,12 +96,12 @@ with st.sidebar:
             pass
 
         country_options = ['USA', 'Singapore', 'Japanese','Korea']
-        country_options_key = {"USA":"us", "Singapore":"sg", "Japanese":"jp","Korea":"kr"}
+        country_options_key = {"USA":"us"}
         country_lable=st.selectbox('Select Country', country_options)
-        app_name = st.text_input("Enter app name", "",disabled=st.session_state['processing'])
+        # app_name = st.text_input("Enter app name", "",disabled=st.session_state['processing'])
 
-        ranks_options = ['ALL', '5', '4', '3','2','1']
-        selected_ranks_option = st.selectbox('Select Ranks', ranks_options,disabled=st.session_state['processing'])
+        # ranks_options = ['ALL', '5', '4', '3','2','1']
+        # selected_ranks_option = st.selectbox('Select Ranks', ranks_options,disabled=st.session_state['processing'])
 
         #selected_pages_option = st.selectbox('Select Page ()', [1,2,3,4,5],disabled=st.session_state['processing'])
         selected_pages_option = 1
@@ -109,35 +109,35 @@ with st.sidebar:
         
         st.divider()
 
-        st.sidebar.markdown(
-                f"""<center><a href="https://aws.amazon.com/bedrock" target="_blank">
-            <img src="data:image/jpeg;base64,{data_url}" alt="bedrock logo" style="width:50px;">
-            </a><a href="https://github.com/joaomdmoura/crewAI" target="_blank">
-                <img src="https://raw.githubusercontent.com/joaomdmoura/crewAI/main/docs/crewai_logo.png" alt="CrewAI Logo" style="width:100px;"/>
-            </a></center>
-            """,
-                unsafe_allow_html=True
-            )
+        # st.sidebar.markdown(
+        #         f"""<center><a href="https://aws.amazon.com/bedrock" target="_blank">
+        #     </a><a href="https://github.com/joaomdmoura/crewAI" target="_blank">
+        #         <img src="https://raw.githubusercontent.com/joaomdmoura/crewAI/main/docs/crewai_logo.png" alt="CrewAI Logo" style="width:100px;"/>
+        #     </a></center>
+        #     """,
+        #         unsafe_allow_html=True
+        #     )
             
 # Create the analysis_complete_placeholder before it's used
 analysis_complete_placeholder = st.container()
 
 if submitted:
     # Display the name
+    app_name = "skland"
     app_name=app_name.strip()
-    if app_name=="" and selected_store_option=="Custom File":
-        st.warning("You need input app name.")
-        hide_warning()
+    # if app_name=="" and selected_store_option=="Custom File":
+    #     st.warning("You need input app name.")
+    #     hide_warning()
     
-
+ 
     if app_name!="":
         analysis_complete_placeholder.empty()
-        country="us"
-        if country_lable in country_options_key:
-            country=country_options_key[country_lable]
+    #     country="us"
+    #     if country_lable in country_options_key:
+    #         country=country_options_key[country_lable]
         
-        #st.session_state['processing'] = True
-        st.write(f"App name: {app_name},Store: {selected_store_option},Country: {country}, Ranks: [{selected_ranks_option}]")
+        st.session_state['processing'] = True
+        st.write(f"App name: skland")
         expander = st.expander("Processing...")
         
         with expander:
@@ -145,12 +145,13 @@ if submitted:
             stream_to_expander = StreamToExpander(expander)
             # Initialize your CrewAI with the output stream
             rank = -1 
-            if selected_ranks_option!="ALL":
-                rank = int(selected_ranks_option)
+            # if selected_ranks_option!="ALL":
+            #     rank = int(selected_ranks_option)
             if (selected_store_option == "Custom File"):
-                app_id,crew = init_app_crew(selected_store_option,app_name,country,rank,page=selected_pages_option,file=uploaded_file_name,output_stream=stream_to_expander)
-            else:
-                app_id,crew = init_app_crew( selected_store_option,app_name,country,rank,page=selected_pages_option,output_stream=stream_to_expander)
+                # app_id,
+                crew = init_forum_crew(file=uploaded_file_name,output_stream=stream_to_expander)
+            # else:
+            #     app_id,crew = init_forum_crew( selected_store_option,app_name,country,rank,page=selected_pages_option,output_stream=stream_to_expander)
 
             with st.spinner('Analyzing...'):
                 try:
@@ -174,18 +175,18 @@ if submitted:
 
             
             b64 = base64.b64encode(crew_result.encode("utf-8")).decode()
-            md = f'<a href="data:text/markdown;base64,{b64}" download="{app_name}_report.md">Download {app_name} Report</a>'
+            md = f'<a href="data:text/markdown;base64,{b64}" download="skland_report.md">Download skland Report</a>'
             st.markdown(md, unsafe_allow_html=True)
 
             st.session_state['processing'] = False
 
-            raw_data_name = app_id
-            if selected_store_option =="Apple Store":
-                raw_data_name = app_name
-            with open(f"output/{raw_data_name}.json", "rb") as file:
+            raw_data_name = 'skland'
+            # if selected_store_option =="Apple Store":
+            #     raw_data_name = 'skland'
+            with open(f"./output/{raw_data_name}.json", "rb") as file:
                 file_data = file.read()
                 b64 = base64.b64encode(file_data).decode()
-                md = f'<a href="data:application/json;base64,{b64}" download="{app_name}.json">Download {app_name} Reviews Data</a>'
+                md = f'<a href="data:application/json;base64,{b64}" download="skland.json">Download skland Reviews Data</a>'
                 st.markdown(md, unsafe_allow_html=True)
 
             

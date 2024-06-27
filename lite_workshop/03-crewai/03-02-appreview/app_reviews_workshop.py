@@ -115,6 +115,19 @@ researcher = Agent(
   
 )
 
+skland_researcher = Agent(
+  role='Expert game community topic and comment reviews summarizer',
+  goal='Found story response , game play issue, game content issue in every user\'s reviews content, you need keep username',
+  backstory="""You are a renowned expert summarizer of AI related 
+  game forum "skland" content reviewer, known for your insightful 
+  and engaging articles. You transform complex concepts into 
+  compelling narratives. You output in the language of 
+  Chinese.""",
+  verbose=True,
+  allow_delegation=True,
+  llm=bedrock_llm
+  
+)
 
 
 def init_app_crew(store:str,app_name:str,country:str, rank:int=-1,page:int=1, file:str="",output_stream=None):

@@ -16,18 +16,21 @@ from langchain_community.chat_models import BedrockChat
 
 
 from crewai import Agent, Task, Crew
-from crewai.telemetry import Telemetry
+# from crewai.telemetry import Telemetry
 
 import steam  
-
+from typing import Optional
+name: Optional[str] = None
+from typing import Union
+foo: Union[str, int, float] = "bar"
 
 #Disable CrewAI Anonymous Telemetry
-def noop(*args, **kwargs):
-    pass
+# def noop(*args, **kwargs):
+#     pass
 
-for attr in dir(Telemetry):
-    if callable(getattr(Telemetry, attr)) and not attr.startswith("__"):
-        setattr(Telemetry, attr, noop)
+# for attr in dir(Telemetry):
+#     if callable(getattr(Telemetry, attr)) and not attr.startswith("__"):
+#         setattr(Telemetry, attr, noop)
 
 
 class DateTimeEncoder(json.JSONEncoder):
